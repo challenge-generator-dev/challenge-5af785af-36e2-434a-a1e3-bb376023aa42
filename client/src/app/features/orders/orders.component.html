@@ -1,0 +1,33 @@
+<div class="orders-container">
+  <header class="orders-header">
+    <h1>Seguimiento de Órdenes</h1>
+    <div class="connection-status" [class.connected]="connectionStatus()" [class.disconnected]="!connectionStatus()">
+      <span class="status-indicator"></span>
+      <span class="status-text">{{ connectionStatus() ? 'Conectado' : 'Desconectado' }}</span>
+    </div>
+  </header>
+
+  <app-error-message *ngIf="error()" [message]="error()!"></app-error-message>
+
+  <section class="orders-list" *ngIf="orders().length > 0; else noOrders">
+    <app-order-card
+      *ngFor="let order of orders(); trackBy: trackByOrderId"
+      [order]="order">
+    </app-order-card>
+  </section>
+
+  <ng-template #noOrders>
+    <div class="empty-state">
+      <mat-icon class="empty-icon">inbox</mat-icon>
+      <p class="empty-message">No hay órdenes disponibles</p>
+      <p class="empty-hint">Las órdenes aparecerán aquí cuando se generen eventos</p>
+    </div>
+  </ng-template>
+
+  <div class="actions-bar" *ngIf="orders().length > 0">
+    <button mat-raised-button color="primary" (click)="clearOrders()">
+      <mat-icon>clear_all</mat-icon>
+      Limpiar Órdenes
+    </button>
+  </div>
+</div>
